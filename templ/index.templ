@@ -1,0 +1,97 @@
+package template
+import (
+    "strconv"
+    "projectTemplate/modle"
+    )
+
+templ Index(name string,boxs []modle.Box){
+    <html>
+    <head>
+        <link rel="stylesheet" href="/public/output.css"></link>
+    </head>
+    <body class="flex flex-col justify-center font-bold text-white py-4 px-2">
+    <div class="bg-slate-600 text-4xl font-serif first-letter:uppercase pl-4 py-8">
+    {name}
+    </div>
+    <div class="flex flex-row h-screen">
+       @KanBan("看板")
+    @BoxContainer(boxs) 
+    </div>
+    
+    </body>
+    
+    </html>
+}
+
+templ KanBan(title string){
+    <div class="bg-neutral-600   w-1/4  ">
+    <h1 class="py-4 px-2">{title}</h1>
+    <hr/>
+    @Form("post","/box")</div>
+}
+
+templ Field(name string,inputType string){
+    <label for={name}>{name}</label>
+    <input name={name} type={inputType} id={name} class="px-4 py-2"/>
+}
+
+templ Form(method string,url string){
+    <div class="mt-2 px-2 py-4 text-black text-xl content-center">
+    <form method={method} action={templ.SafeURL(url)} class="flex justify-between">
+        @Field("title","text")
+        <button type="submit" >创建</button>
+    </form>
+    </div>
+}
+
+templ ButtonMenu(){
+    <div class="py-4 bg-slate-400 px-2">
+        <a href="/box/add" class="px-4 py-2 font-bold text-black border border-white hover:text-white">Add Box</a>
+    </div>
+}
+
+templ BoxContainer(boxs []modle.Box){
+    <div class="grid grid-cols-3  gap-2   bg-zinc-600 py-4 px-2  content-start flex-1">
+        for _,box:= range boxs{
+            @Box(box)
+        }
+    </div>
+}
+
+templ Box(b modle.Box){
+    if b.Count>10 {
+        <div class=" px-4 py-2 font-serif font-bold rounded border-4 border-blue-400">
+            <p>盒子名称: {b.Title}</p>
+            <p>Count: {strconv.Itoa(b.Count)}</p>
+            <p>State: {strconv.Itoa(b.State)}</p>
+            <p>
+                ID: {b.UUID.String()}
+            </p>
+         </div>
+    } else {
+        <div class=" px-4 py-2 font-serif font-bold  rounded  border-4 border-blue-400">
+            <p>盒子名称: {b.Title}</p>
+            <p>Count: {strconv.Itoa(b.Count)}</p>
+            <p>State: {strconv.Itoa(b.State)}</p>
+            <p>
+                ID: {b.UUID.String()}
+            </p>
+         </div>
+    }
+}
+             
+   
+
+   
+    
+    
+    
+   
+
+
+
+
+
+
+
+
